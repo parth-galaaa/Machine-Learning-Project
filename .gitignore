@@ -1,0 +1,6 @@
+
+/kaggle_evaluation
+/lags.parquet
+/test.parquet
+/train.parquet
+*.csv
