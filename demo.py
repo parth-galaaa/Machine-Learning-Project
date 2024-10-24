@@ -14,3 +14,4 @@ df = pl.read_parquet(parquet_file_path)
 
 # Display the first few rows of the dataframe
 print(df.head())
+print(df.row(0)) 
