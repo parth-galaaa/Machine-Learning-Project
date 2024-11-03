@@ -3,6 +3,7 @@ import os
 import pandas as pd #used to work with python data frames
 from sklearn.linear_model import LinearRegression #linear regression model
 from sklearn.metrics import  r2_score #scoring for sci kit learn
+from sklearn.ensemble import GradientBoostingRegressor
 
 
 # Path to the specific parquet file in the partition
@@ -23,7 +24,8 @@ X_test = testdf.drop('responder_6', axis=1) #remove target from test features
 y_test = testdf['responder_6'] # target value for test
 
 regressors = {
-    'Linear Regression':LinearRegression()
+    'Linear Regression':LinearRegression(),
+    'Gradient Boost':GradientBoostingRegressor(random_state=0)
 }
 
 
