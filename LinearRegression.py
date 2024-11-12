@@ -9,6 +9,9 @@ from sklearn.preprocessing import StandardScaler
 file_path = r'C:\Users\Ibtas\School\FALL 2024\COMP 4730\Project\jane-street\train.parquet\partition_id=0'
 data = pd.read_parquet(file_path)
 
+#10% of data
+data = data.sample(frac=0.1, random_state=42)
+
 # Check for missing data in the entire dataset before any imputation
 print("Missing values in the dataset before imputation:")
 print(data.isnull().sum())
@@ -81,3 +84,7 @@ print(data.info())
 
 #Describe the dataset
 print(data.describe())
+
+#predict the target values for the test set
+y_pred = model.predict(x_test)
+print("Predicted values:", y_pred)  # Add this line to see predictions
