@@ -5,3 +5,5 @@
 /train.parquet
 *.csv
 /.venv
+sample output.xlsx
+test.py
