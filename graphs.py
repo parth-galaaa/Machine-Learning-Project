@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import root_mean_squared_error, r2_score
 
 # Read data from the CSV file
-df = pd.read_csv('regressors_results.csv', sep=',')
+df = pd.read_csv('/Users/parth/Downloads/regressors_results.csv', sep=',')
 
 # Convert columns with list values to floats
 for col in df.columns[1:]:  # Assuming first column is 'TARGET DATA'
@@ -50,21 +50,19 @@ plt.ylabel('RMSE')
 plt.xticks(rotation=45)
 plt.show()
 
-
+# R² Score Bar Chart for each model
 plt.figure(figsize=(10, 6))
 plt.bar(r2_scores.keys(), r2_scores.values(), color='lightgreen')
 plt.title('R² Scores of Different Models')
 plt.xlabel('Models')
 plt.ylabel('R² Score')
 plt.xticks(rotation=45)
-
-
 plt.yscale('symlog', linthresh=0.01)
 
-
+# Annotate the R² scores on the bars
 for i, (key, value) in enumerate(r2_scores.items()):
     plt.text(i, value, f"{value:.7f}", ha='center', va='bottom')
 
+# Save the R² scores bar chart as a PNG file
 plt.savefig('r2_scores_barchart.png', format='png', dpi=300, bbox_inches='tight')
-
 plt.show()
