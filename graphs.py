@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import root_mean_squared_error, r2_score
 
 # Read data from the CSV file
-df = pd.read_csv('/Users/parth/Downloads/regressors_results.csv', sep=',')
+df = pd.read_csv('regressors_results.csv', sep=',')
 
 # Convert columns with list values to floats
 for col in df.columns[1:]:  # Assuming first column is 'TARGET DATA'
