@@ -1,5 +1,4 @@
 import os
-
 import pandas as pd #used to work with python data frames
 from sklearn.linear_model import LinearRegression #linear regression model
 from sklearn.metrics import  r2_score #scoring for sci kit learn
@@ -14,7 +13,6 @@ import time
 # Path to the specific parquet file in the partition
 parquet_file_path = 'train.parquet/partition_id=0/part-0.parquet' #using the 0th partition to train the initial dataset
 
-
 #load parquet file with pandas dataframe
 df = pd.read_parquet(parquet_file_path) #may need pyarrow extension for this
 imputer = SimpleImputer(strategy='mean')
@@ -23,8 +21,7 @@ imputer = SimpleImputer(strategy='mean')
 df.dropna(axis=1, how='all', inplace=True)
 df[df.columns] = imputer.fit_transform(df[df.columns])
 
-
-
+# Split the data into training and testing sets
 split_index = int(len(df) * 0.2)
 df = df[:split_index]
 print(len(df))
@@ -33,6 +30,7 @@ train_df = df[:split_index]  # Top 80% for training
 test_df = df[split_index:]   # Last 20% for testing
 scaler = StandardScaler()
 
+# Shift the responder columns up by 1
 lag = 1
 for responder in range(9):
     if responder != 6:
@@ -43,17 +41,21 @@ print(test_df)
 train_df = train_df.dropna()
 test_df = test_df.dropna()
 
+# Split the data into features and target
+# Training data
 X_train = train_df.drop('responder_6', axis=1) #remove target value from training set
 y_train = train_df['responder_6'] #y value used to train is selected here
 
-
+# Testing data
 X_test = test_df.drop('responder_6', axis=1) #remove target from test features
 y_test = test_df['responder_6'] # target value for test
 
-
+# Scale the data
 X_train  = scaler.fit_transform(X_train )
 X_test = scaler.transform(X_test)
 num_columns = X_train.shape[1]
+
+# Define the regressors
 def CNN():
     model = Sequential()
     model.add(Conv1D(filters=64, kernel_size=3, activation='relu', input_shape=(num_columns, 1)))
@@ -82,7 +84,7 @@ def Hybrid():
     model.compile(optimizer='adam', loss='mean_squared_error')
     return model
 
-
+# Dictionary of regressors
 regressors = {
     'Linear Regression': LinearRegression(),
     'Gradient Boost':HistGradientBoostingRegressor(random_state=0),
@@ -95,20 +97,18 @@ regressors = {
     'LSTM':kerasLSTM(),
     'MLP Regressor': MLPRegressor(hidden_layer_sizes=(100,), max_iter=200, random_state=42),
     'Hybrid':Hybrid()
- 
 }
 
-
-
-
+# Dictionary to hold results
 regressors_results = {}
 
-
+# Add target data to results
 regressors_results['TARGET DATA'] = y_test
 
 # List to hold timing results for CSV
 timing_results = []
 
+# Train and predict for each regressor
 for regressor_name, regressor in regressors.items():
     print(f"Starting training for {regressor_name}...")
     
@@ -150,7 +150,7 @@ with open('training_times.csv', mode='w', newline='') as file:
 
 print("Training times saved to 'training_times.csv'")
 
-
+# Convert results to DataFrame
 results_df = pd.DataFrame(regressors_results)
 
 # Save DataFrame to CSV
