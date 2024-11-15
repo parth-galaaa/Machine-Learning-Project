@@ -64,5 +64,5 @@ for i, (key, value) in enumerate(r2_scores.items()):
     plt.text(i, value, f"{value:.7f}", ha='center', va='bottom')
 
 # Save the R² scores bar chart as a PNG file
-plt.savefig('r2_scores_barchart.png', format='png', dpi=300, bbox_inches='tight')
+# plt.savefig('r2_scores_barchart.png', format='png', dpi=300, bbox_inches='tight')
 plt.show()
